@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using ScreenSound.Modelos;
+using ScreenSound.Shared.Modelos.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,6 +15,8 @@ namespace ScreenSound.Banco
     {
         public DbSet<Artista> Artistas { get; set; }
         public DbSet<Musica> Musicas { get; set; }
+
+        public DbSet<Genero> Generos { get; set; }
 
         private string connectionString = "Data Source=localhost;Initial Catalog=ScreenSound;User ID=SA;Password=Bagu@633710;TrustServerCertificate=true;";
 
