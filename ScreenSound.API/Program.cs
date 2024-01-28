@@ -41,7 +41,13 @@ app.MapGet("/Artistas/{nome}", async (HttpContext context, string nome) =>
             var dal = new DAL<Artista>(new ScreenSoundContext());
             var artista = dal.RecuperarPor(a => a.Nome.ToUpper().Equals(nome.ToUpper()));
 
-            await context.Response.WriteAsJsonAsync(artista);
+            if (artista is null)
+            {
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
+                await context.Response.WriteAsync($"Artista {nome} não encontrato");
+            }
+            else
+                await context.Response.WriteAsJsonAsync(artista);
         }
     }
     catch (JsonException ex)
@@ -50,6 +56,7 @@ app.MapGet("/Artistas/{nome}", async (HttpContext context, string nome) =>
         await context.Response.WriteAsync($"Erro ao desserializar JSON: {ex.Message}");
     }
 });
+
 
 
 
