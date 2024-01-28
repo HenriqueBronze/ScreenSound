@@ -3,6 +3,7 @@ using ScreenSound.Modelos;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,16 +25,34 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/", () =>
+app.MapGet("/Artistas", () =>
 {
-    // Configurar a cultura invariante
-    CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
-    CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
-
     var dal = new DAL<Artista>(new ScreenSoundContext());
     return dal.Listar();
-
 });
+
+app.MapGet("/Artistas/{nome}", async (HttpContext context, string nome) =>
+{
+    try
+    {
+        using (var reader = new StreamReader(context.Request.Body))
+        {
+            var json = await reader.ReadToEndAsync();
+            var dal = new DAL<Artista>(new ScreenSoundContext());
+            var artista = dal.RecuperarPor(a => a.Nome.ToUpper().Equals(nome.ToUpper()));
+
+            await context.Response.WriteAsJsonAsync(artista);
+        }
+    }
+    catch (JsonException ex)
+    {
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        await context.Response.WriteAsync($"Erro ao desserializar JSON: {ex.Message}");
+    }
+});
+
+
+
 
 app.Run();
 

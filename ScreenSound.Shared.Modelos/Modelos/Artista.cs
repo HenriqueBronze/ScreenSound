@@ -1,4 +1,6 @@
-﻿namespace ScreenSound.Modelos; 
+﻿using System.Text.Json.Serialization;
+
+namespace ScreenSound.Modelos; 
 
 public class Artista 
 {
@@ -11,7 +13,9 @@ public class Artista
         FotoPerfil = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png";
     }
 
+    [JsonPropertyName("Nome")]
     public string Nome { get; set; }
+
     public string FotoPerfil { get; set; }
     public string Bio { get; set; }
     public int Id { get; set; }

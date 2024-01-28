@@ -1,0 +1,5 @@
+﻿<linker>
+	<assembly fullname="ScreenSound.API">
+		<type fullname="Castle.Proxies.ArtistaProxy" />
+	</assembly>
+</linker>
